@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="MyVisualStudio.Views.RedactorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:v="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
+             xmlns:local="clr-namespace:MyVisualStudio.Views"
+             xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:sc="https://github.com/fernandreu/ScintillaNET.WPF"
+             xmlns:vm="clr-namespace:MyVisualStudio.ViewModels"
+             xmlns:m="clr-namespace:MyVisualStudio.Models"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             materialDesign:ThemeAssist.Theme="Dark"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DataContext="{d:DesignInstance vm:RedactorViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800" Background="#242424">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="Noting" Icon="{materialDesign:PackIcon Kind=ContentSave}"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Grid.Row="1">
+            <ToolBar Style="{StaticResource MaterialDesignToolBar}" ClipToBounds="False">
+                <Button ToolTip="Compiles code" Command="{Binding CompileCommand}" Content="▶" FontSize="10" Foreground="Green"/>
+                <Button ToolTip="Saves selected file" Command="{Binding SaveCommand}" Content="Save" FontSize="10" Foreground="LightBlue"/>
+            </ToolBar>
+        </ToolBarTray>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" MinWidth="100" MaxWidth="300"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="150" MinHeight="100" MaxHeight="300"/>
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Row="0" Grid.RowSpan="2"
+                  Width="5" Background="Purple" 
+                  HorizontalAlignment="Right"/>
+            <GridSplitter Grid.Row="1" Grid.Column="1"
+                  Background="Purple" 
+                  HorizontalAlignment="Stretch"
+                          Height="5"
+                  VerticalAlignment="Top"/>
+            <Grid Grid.Row="0" Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Solution Explorer" HorizontalAlignment="Center"/>
+                <TreeView Grid.Row="1" Margin="0 0 5 0" x:Name="SolutionExplorer"
+                    ItemsSource="{Binding FileRepos.Folders}">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type m:Folder}" ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}">
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding MouseAction="RightClick" 
+                                                      Command="{Binding DataContext.AddItemCommand,
+                                                      RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+                                                      CommandParameter="{Binding ElementName=SolutionExplorer,Path=SelectedItem}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type m:MyFile}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" >
+                                    <TextBlock.InputBindings>
+                                        <MouseBinding MouseAction="LeftDoubleClick" 
+                                                      Command="{Binding DataContext.OpenCommand,
+                                                      RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+                                                      CommandParameter="{Binding ElementName=SolutionExplorer,Path=SelectedItem}"/>
+                                    </TextBlock.InputBindings>
+                                </TextBlock>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+                <StackPanel Grid.Row="2" Orientation="Vertical">
+                    <TextBlock Text="Select item" HorizontalAlignment="Center"/>
+                    <Button
+                          Style="{StaticResource MaterialDesignOutlinedLightButton}"
+                          Content="Delete"
+                          Command="{Binding DeleteCommand}"
+                          CommandParameter="{Binding ElementName=SolutionExplorer,Path=SelectedItem}"/>
+                    <Button
+                          Style="{StaticResource MaterialDesignOutlinedLightButton}"
+                          Content="Add Item(select folder)"
+                          Command="{Binding AddItemCommand}"
+                          CommandParameter="{Binding ElementName=SolutionExplorer,Path=SelectedItem}"/>
+                </StackPanel>
+            </Grid>
+
+            
+            <v:RoslynCodeEditor x:Name="TextRedactor" TextChanged="TextRedactor_TextChanged" Grid.Column="1" Grid.Row="0" Background="#242424"/>
+
+        </Grid>
+
+
+    </Grid>
+</UserControl>

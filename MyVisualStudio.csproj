@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="RoslynPad.Editor.Windows\**" />
+    <Compile Remove="RoslynPad.Roslyn.Windows\**" />
+    <Compile Remove="RoslynPad.Roslyn\**" />
+    <EmbeddedResource Remove="RoslynPad.Editor.Windows\**" />
+    <EmbeddedResource Remove="RoslynPad.Roslyn.Windows\**" />
+    <EmbeddedResource Remove="RoslynPad.Roslyn\**" />
+    <None Remove="RoslynPad.Editor.Windows\**" />
+    <None Remove="RoslynPad.Roslyn.Windows\**" />
+    <None Remove="RoslynPad.Roslyn\**" />
+    <Page Remove="RoslynPad.Editor.Windows\**" />
+    <Page Remove="RoslynPad.Roslyn.Windows\**" />
+    <Page Remove="RoslynPad.Roslyn\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
+    <PackageReference Include="MaterialDesignColors" Version="2.0.5" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="RoslynPad.Editor.Windows\RoslynPad.Editor.Windows.csproj" />
+    <ProjectReference Include="RoslynPad.Roslyn.Windows\RoslynPad.Roslyn.Windows.csproj" />
+    <ProjectReference Include="RoslynPad.Roslyn\RoslynPad.Roslyn.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AddItemView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\AddItemView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

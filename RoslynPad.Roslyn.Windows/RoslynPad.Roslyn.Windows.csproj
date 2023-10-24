@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>RoslynPad.Roslyn</RootNamespace>
+    <Version>$(RoslynAssemblyVersion)</Version>
+    <PackageVersion>$(RoslynPackageVersion)</PackageVersion>
+    <Description>Provides platform-specific (WPF) implementations for UI elements required by the RoslynPad.Roslyn package.</Description>
+    <IsPackable>true</IsPackable>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
+    <TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RoslynPad.Roslyn\RoslynPad.Roslyn.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" />
+  </ItemGroup>
+</Project>
